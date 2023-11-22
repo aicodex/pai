@@ -32,3 +32,4 @@ __pycache__
 *.egg-info/
 .openpai/
 .ipynb_checkpoints/
+contrib/kubespray/config/

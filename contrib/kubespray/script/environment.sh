@@ -17,7 +17,7 @@ mkdir -p ${HOME}/pai-deploy/
 
 echo "Clone kubespray source code from github to ${HOME}/pai-deploy"
 sudo rm -rf ${HOME}/pai-deploy/kubespray
-git clone -b release-2.12 https://github.com/kubernetes-sigs/kubespray.git ${HOME}/pai-deploy/kubespray
+git clone -b release-2.23 https://github.com/kubernetes-sigs/kubespray.git ${HOME}/pai-deploy/kubespray
 
 echo "Copy inventory folder, and save it "
 cp -rfp ${HOME}/pai-deploy/kubespray/inventory/sample ${HOME}/pai-deploy/kubespray/inventory/pai
@@ -31,11 +31,11 @@ sudo apt-get -y install software-properties-common python3 python3-dev python3-p
 # "apt-get install python3" will install python3.5 on Ubuntu 16.04
 # The lastest pip doesn't support python3.5.
 # Here we use a fixed version number to ensure compatibility.
-sudo python3 -m pip install pip==20.3.4
+python3 -m pip install pip==20.3.4
 
 echo "Install python packages"
-sudo python3 -m pip install paramiko # need paramiko for ansible-playbook
-sudo python3 -m pip install -r script/requirements.txt
+python3 -m pip install paramiko # need paramiko for ansible-playbook
+python3 -m pip install -r script/requirements.txt
 
 echo "Install sshpass"
 sudo apt-get -y install sshpass
@@ -44,7 +44,9 @@ sudo apt-get -y install sshpass
 # Use ansible 2.9.7 as a workaround
 # Reference: https://stackoverflow.com/questions/61460151/ansible-not-reporting-distribution-info-on-ubuntu-20-04
 # We can upgrade kubespray version to avoid this issue in the future.
-sed -i 's/ansible==.*/ansible==2.9.7/' ${HOME}/pai-deploy/kubespray/requirements.txt
+#sed -i 's/ansible==.*/ansible==4.10.0/' ${HOME}/pai-deploy/kubespray/requirements.txt
+sed -i 's/minimal_ansible_version: .*/minimal_ansible_version: 1.14.0/' ${HOME}/pai-deploy/kubespray/playbooks/ansible_version.yml
+sed -i 's/maximal_ansible_version: .*/maximal_ansible_version: 9.15.0/' ${HOME}/pai-deploy/kubespray/playbooks/ansible_version.yml
 
 echo "Install kubespray's requirements and ansible is included"
-sudo python3 -m pip install -r ${HOME}/pai-deploy/kubespray/requirements.txt
+python3 -m pip install -r ${HOME}/pai-deploy/kubespray/requirements.txt
