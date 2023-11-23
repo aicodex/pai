@@ -16,8 +16,8 @@ echo "Create working folder in ${HOME}/pai-deploy"
 mkdir -p ${HOME}/pai-deploy/
 
 echo "Clone kubespray source code from github to ${HOME}/pai-deploy"
-sudo rm -rf ${HOME}/pai-deploy/kubespray
-git clone -b release-2.23 https://github.com/kubernetes-sigs/kubespray.git ${HOME}/pai-deploy/kubespray
+#sudo rm -rf ${HOME}/pai-deploy/kubespray
+git clone -b release-2.19 https://gitee.com/xana/kubespray.git ${HOME}/pai-deploy/kubespray
 
 echo "Copy inventory folder, and save it "
 cp -rfp ${HOME}/pai-deploy/kubespray/inventory/sample ${HOME}/pai-deploy/kubespray/inventory/pai
@@ -45,7 +45,7 @@ sudo apt-get -y install sshpass
 # Reference: https://stackoverflow.com/questions/61460151/ansible-not-reporting-distribution-info-on-ubuntu-20-04
 # We can upgrade kubespray version to avoid this issue in the future.
 #sed -i 's/ansible==.*/ansible==4.10.0/' ${HOME}/pai-deploy/kubespray/requirements.txt
-sed -i 's/minimal_ansible_version: .*/minimal_ansible_version: 1.14.0/' ${HOME}/pai-deploy/kubespray/playbooks/ansible_version.yml
+sed -i 's/minimal_ansible_version: .*/minimal_ansible_version: 1.0.0/' ${HOME}/pai-deploy/kubespray/playbooks/ansible_version.yml
 sed -i 's/maximal_ansible_version: .*/maximal_ansible_version: 9.15.0/' ${HOME}/pai-deploy/kubespray/playbooks/ansible_version.yml
 
 echo "Install kubespray's requirements and ansible is included"
