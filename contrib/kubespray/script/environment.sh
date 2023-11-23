@@ -16,8 +16,8 @@ echo "Create working folder in ${HOME}/pai-deploy"
 mkdir -p ${HOME}/pai-deploy/
 
 echo "Clone kubespray source code from github to ${HOME}/pai-deploy"
-#sudo rm -rf ${HOME}/pai-deploy/kubespray
-git clone -b release-2.19 https://gitee.com/xana/kubespray.git ${HOME}/pai-deploy/kubespray
+sudo rm -rf ${HOME}/pai-deploy/kubespray
+git clone -b release-2.15 https://gitee.com/xana/kubespray.git ${HOME}/pai-deploy/kubespray
 
 echo "Copy inventory folder, and save it "
 cp -rfp ${HOME}/pai-deploy/kubespray/inventory/sample ${HOME}/pai-deploy/kubespray/inventory/pai
