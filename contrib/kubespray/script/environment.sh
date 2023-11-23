@@ -49,6 +49,8 @@ sed -i 's/jinja2==.*/jinja2/' ${HOME}/pai-deploy/kubespray/requirements.txt
 sed -i 's/cryptography==.*/cryptography/' ${HOME}/pai-deploy/kubespray/requirements.txt
 sed -i 's/minimal_ansible_version: .*/minimal_ansible_version: 1.0.0/' ${HOME}/pai-deploy/kubespray/ansible_version.yml
 sed -i 's/maximal_ansible_version: .*/maximal_ansible_version: 9.15.0/' ${HOME}/pai-deploy/kubespray/ansible_version.yml
+sed -i 's/python-apt/python3-apt/' ${HOME}/pai-deploy/kubespray/roles/kubernetes/preinstall/vars/ubuntu.yml
+sed -i 's/aufs-tools/python3-apt/' ${HOME}/pai-deploy/kubespray/roles/kubernetes/preinstall/vars/ubuntu.yml
 
 echo "Install kubespray's requirements and ansible is included"
 python3 -m pip install -r ${HOME}/pai-deploy/kubespray/requirements.txt
