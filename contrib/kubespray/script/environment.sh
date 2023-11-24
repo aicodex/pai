@@ -44,7 +44,7 @@ sudo apt-get -y install sshpass
 # Use ansible 2.9.7 as a workaround
 # Reference: https://stackoverflow.com/questions/61460151/ansible-not-reporting-distribution-info-on-ubuntu-20-04
 # We can upgrade kubespray version to avoid this issue in the future.
-sed -i 's/ansible==.*/ansible==2.9.18/' ${HOME}/pai-deploy/kubespray/requirements.txt
+sed -i 's/ansible==.*/ansible==2.9.7/' ${HOME}/pai-deploy/kubespray/requirements.txt
 #sed -i 's/jinja2==.*/jinja2/' ${HOME}/pai-deploy/kubespray/requirements.txt
 #sed -i 's/cryptography==.*/cryptography/' ${HOME}/pai-deploy/kubespray/requirements.txt
 #sed -i 's/minimal_ansible_version: .*/minimal_ansible_version: 1.0.0/' ${HOME}/pai-deploy/kubespray/ansible_version.yml
