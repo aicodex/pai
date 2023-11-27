@@ -2,6 +2,21 @@ user: forexample
 password: forexample
 docker_image_tag: v1.8.1
 
+gcr_image_repo: "registry.cn-hangzhou.aliyuncs.com"
+kube_image_repo: "registry.cn-hangzhou.aliyuncs.com/google_containers"
+openpai_kubespray_extra_var:
+  http_proxy: http://user:pwd@proxy_ip:11800
+  https_proxy: http://user:pwd@proxy_ip:11800
+  pod_infra_image_repo: "registry.cn-hangzhou.aliyuncs.com/google_containers/pause-{{ image_arch }}"
+  dnsautoscaler_image_repo: "k8s.gcr.io/cpa/cluster-proportional-autoscaler-{{ image_arch }}"
+  tiller_image_repo: "registry.cn-hangzhou.aliyuncs.com/google_containers/kubernetes-helm/tiller"
+  registry_proxy_image_repo: "registry.cn-hangzhou.aliyuncs.com/google_containers/kube-registry-proxy"
+  metrics_server_image_repo: "registry.cn-hangzhou.aliyuncs.com/google_containers/metrics-server-amd64"
+  addon_resizer_image_repo: "registry.cn-hangzhou.aliyuncs.com/google_containers/addon-resizer"
+  dashboard_image_repo: "registry.cn-hangzhou.aliyuncs.com/google_containers/kubernetes-dashboard-{{ image_arch }}"
+# for kubespray 2.12 autoscaler v 1.6.0
+#  dnsautoscaler_image_repo: "mirrorgooglecontainers/cluster-proportional-autoscaler-{{ image_arch }}"
+
 # Optional
 
 #######################################################################
