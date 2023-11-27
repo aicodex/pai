@@ -78,6 +78,7 @@ def get_kubernetes_pod_info_from_API():
 
 def get_node_resources():
     node_allocatable_resources = get_kubernetes_node_info_from_API()
+    print(node_allocatable_resources)
     node_free_resources = copy.deepcopy(node_allocatable_resources)
     pod_resources_dict = get_kubernetes_pod_info_from_API()
     for node_name in node_free_resources:
@@ -133,7 +134,6 @@ def get_min_free_resource(workers, node_resource_dict, pai_daemon_resource_dict)
     """
     min_mem = math.inf
     min_cpu = math.inf
-
     for node_name in workers:
         reserved_cpu = min(node_resource_dict["allocatable"][node_name]["cpu-resource"] * \
             Decimal(PAI_RESERVE_RESOURCE_PERCENTAGE), Decimal(PAI_MAX_RESERVE_CPU_PER_NODE))

@@ -29,7 +29,7 @@ echo "Setting up environment..."
 /bin/bash script/environment.sh -c ${CLUSTER_CONFIG} || exit $?
 
 echo "Checking layout.yaml schema..."
-/usr/bin/python3 script/validate_layout_schema.py -l ${LAYOUT} -c ${CLUSTER_CONFIG} || exit $?
+python3 script/validate_layout_schema.py -l ${LAYOUT} -c ${CLUSTER_CONFIG} || exit $?
 
 echo "Checking requirements..."
 /bin/bash requirement.sh -l ${LAYOUT} -c ${CLUSTER_CONFIG}
