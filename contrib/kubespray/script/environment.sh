@@ -46,6 +46,7 @@ sed -i 's/aufs-tools/python3-apt/' ${HOME}/pai-deploy/kubespray/roles/kubernetes
 sed -i 's/python-minimal/python*-minimal/' ${HOME}/pai-deploy/kubespray/roles/bootstrap-os/tasks/bootstrap-debian.yml
 # test in docker 24.0.7
 sed -i 's/19.03/latest/' ${HOME}/pai-deploy/kubespray/roles/container-engine/docker/defaults/main.yml
+sed -i 's/1.3.9/latest/' ${HOME}/pai-deploy/kubespray/roles/container-engine/containerd-common/defaults/main.yml
 sed -i 's/# docker_version/docker_version/' ${HOME}/pai-deploy/kubesprayinventory/pai/openpai.yml
 sed -i 's/container_manager: containerd/container_manager: docker/' ${HOME}/pai-deploy/kubespray/roles/kubespray-defaults/defaults/main.yaml
 echo "Install kubespray's requirements and ansible is included"
