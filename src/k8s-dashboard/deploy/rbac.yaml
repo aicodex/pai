@@ -46,7 +46,7 @@ rules:
   # Allow Dashboard to get, update and delete Dashboard exclusive secrets.
 - apiGroups: [""]
   resources: ["secrets"]
-  resourceNames: ["kubernetes-dashboard-key-holder", "kubernetes-dashboard-certs-openpai"]
+  resourceNames: ["kubernetes-dashboard-key-holder", "kubernetes-dashboard-certs-openpai", "kubernetes-dashboard-csrf"]
   verbs: ["get", "update", "delete"]
   # Allow Dashboard to get and update 'kubernetes-dashboard-settings' config map.
 - apiGroups: [""]
@@ -79,3 +79,15 @@ subjects:
   name: kubernetes-dashboard-openpai
   namespace: kube-system
 
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    k8s-app: kubernetes-dashboard-openpai
+  name: kubernetes-dashboard-csrf
+  namespace: kube-system
+type: Opaque
+data:
+  csrf: ""
