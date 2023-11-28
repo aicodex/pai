@@ -37,7 +37,8 @@ spec:
         kubernetes.io/hostname: {{ cluster_cfg['k8s-dashboard']['dashboard-host'] }}
       containers:
       - name: kubernetes-dashboard-openpai
-        image: {{ cluster_cfg["cluster"]["docker-registry"]["prefix"] }}kubernetes-dashboard-amd64:{{ cluster_cfg["cluster"]["docker-registry"]["tag"] }}
+        image: kubernetesui/dashboard:v2.0.5
+#        image: k8s.gcr.io/kubernetes-dashboard-amd64:v1.10.1
         args:
           - --auto-generate-certificates
           - --port={{ cluster_cfg['k8s-dashboard']['dashboard-port'] }}
@@ -47,6 +48,8 @@ spec:
         volumeMounts:
           - name: kubernetes-dashboard-certs-openpai
             mountPath: /certs
+          - mountPath: /tmp
+            name: tmp-volume
         {%- if cluster_cfg['cluster']['common']['qos-switch'] == "true" %}
         resources:
           # the ideal cpu setting will be 3.5, according to our experiment. If the server hosting k8s dashboard has enough resource, user can change this setting to a larger value.
@@ -74,4 +77,7 @@ spec:
         - name: kubernetes-dashboard-certs-openpai
           secret:
             secretName: kubernetes-dashboard-certs-openpai
+        - name: tmp-volume
+          emptyDir: {}
       serviceAccountName: kubernetes-dashboard-openpai
+
