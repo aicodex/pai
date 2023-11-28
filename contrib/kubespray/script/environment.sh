@@ -17,7 +17,7 @@ mkdir -p ${HOME}/pai-deploy/
 
 echo "Clone kubespray source code from github to ${HOME}/pai-deploy"
 sudo rm -rf ${HOME}/pai-deploy/kubespray
-git clone -b release-2.15 https://gitee.com/xana/kubespray.git ${HOME}/pai-deploy/kubespray
+git clone -b release-2.15 https://github.com/kubernetes-sigs/kubespray.git ${HOME}/pai-deploy/kubespray
 
 echo "Copy inventory folder, and save it "
 cp -rfp ${HOME}/pai-deploy/kubespray/inventory/sample ${HOME}/pai-deploy/kubespray/inventory/pai
@@ -40,23 +40,13 @@ python3 -m pip install -r script/requirements.txt
 echo "Install sshpass"
 sudo apt-get -y install sshpass
 
-# ansible 2.7 doesn't support distribution info collection on Ubuntu 20.04
-# Use ansible 2.9.7 as a workaround
-# Reference: https://stackoverflow.com/questions/61460151/ansible-not-reporting-distribution-info-on-ubuntu-20-04
-# We can upgrade kubespray version to avoid this issue in the future.
-#sed -i 's/ansible==.*/ansible==2.9.7/' ${HOME}/pai-deploy/kubespray/requirements.txt
-#sed -i 's/jinja2==.*/jinja2/' ${HOME}/pai-deploy/kubespray/requirements.txt
-#sed -i 's/cryptography==.*/cryptography/' ${HOME}/pai-deploy/kubespray/requirements.txt
-sed -i 's/minimal_ansible_version: .*/minimal_ansible_version: 1.0.0/' ${HOME}/pai-deploy/kubespray/ansible_version.yml
-sed -i 's/maximal_ansible_version: .*/maximal_ansible_version: 9.15.0/' ${HOME}/pai-deploy/kubespray/ansible_version.yml
+# test in ubuntu20.04 and ubunutu22.04
 sed -i 's/python-apt/python3-apt/' ${HOME}/pai-deploy/kubespray/roles/kubernetes/preinstall/vars/ubuntu.yml
 sed -i 's/aufs-tools/python3-apt/' ${HOME}/pai-deploy/kubespray/roles/kubernetes/preinstall/vars/ubuntu.yml
 sed -i 's/python-minimal/python*-minimal/' ${HOME}/pai-deploy/kubespray/roles/bootstrap-os/tasks/bootstrap-debian.yml
-sed -i 's/18.09/latest/' ${HOME}/pai-deploy/kubespray/roles/container-engine/docker/defaults/main.yml
+# test in docker 24.0.7
 sed -i 's/19.03/latest/' ${HOME}/pai-deploy/kubespray/roles/container-engine/docker/defaults/main.yml
 sed -i 's/# docker_version/docker_version/' ${HOME}/pai-deploy/kubesprayinventory/pai/openpai.yml
-sed -i 's/1.3.9/latest/' ${HOME}/pai-deploy/kubespray/roles/container-engine/containerd-common/defaults/main.yml
-#sed -i 's/nf_conntrack_ipv4/nf_conntrack/' ${HOME}/pai-deploy/kubespray/roles/kubernetes/node/tasks/main.yml
 sed -i 's/container_manager: containerd/container_manager: docker/' ${HOME}/pai-deploy/kubespray/roles/kubespray-defaults/defaults/main.yaml
 echo "Install kubespray's requirements and ansible is included"
 python3 -m pip install -r ${HOME}/pai-deploy/kubespray/requirements.txt
