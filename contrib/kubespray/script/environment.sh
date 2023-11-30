@@ -49,5 +49,8 @@ sed -i 's/19.03/latest/' ${HOME}/pai-deploy/kubespray/roles/container-engine/doc
 sed -i 's/1.3.9/latest/' ${HOME}/pai-deploy/kubespray/roles/container-engine/containerd-common/defaults/main.yml
 sed -i 's/# docker_version/docker_version/' ${HOME}/pai-deploy/kubesprayinventory/pai/openpai.yml
 sed -i 's/container_manager: containerd/container_manager: docker/' ${HOME}/pai-deploy/kubespray/roles/kubespray-defaults/defaults/main.yaml
+# enable docker network
+sed -i 's/kube_proxy_mode: ipvs/kube_proxy_mode: iptables/' ${HOME}/pai-deploy/kubespray/inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
+sed -i 's/docker_iptables_enabled: "false"/docker_iptables_enabled: "true"/' ${HOME}/pai-deploy/kubespray/inventory/sample/group_vars/all/docker.yml
 echo "Install kubespray's requirements and ansible is included"
 python3 -m pip install -r ${HOME}/pai-deploy/kubespray/requirements.txt
