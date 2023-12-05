@@ -2,6 +2,7 @@ user: forexample
 password: forexample
 docker_image_tag: v1.8.1
 
+enable_marketplace: "true"
 gcr_image_repo: "registry.cn-hangzhou.aliyuncs.com"
 kube_image_repo: "registry.cn-hangzhou.aliyuncs.com/google_containers"
 openpai_kubespray_extra_var:
