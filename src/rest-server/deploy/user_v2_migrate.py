@@ -72,6 +72,7 @@ class TransferClient:
             'username': user_info_item.data['username'],
             'password': user_info_item.data['password'],
             'email': '',
+            'skulimit': '8',
             'grouplist': str(base64.b64encode(json.dumps(grouplist).encode('utf-8')), 'utf-8'),
             'extension': str(base64.b64encode(json.dumps(extension).encode('utf-8')), 'utf-8'),
         }
