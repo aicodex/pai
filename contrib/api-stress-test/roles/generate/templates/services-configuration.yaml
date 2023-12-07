@@ -4,9 +4,9 @@ cluster:
     cluster-type: k8s
     k8s-rbac: "true"
     job-history: "true"
-    data-path: "/datastorage"
+    data-path: "/home/datastorage"
     qos-switch: "false"
-    docker-data-root: "/mnt/docker"
+    docker-data-root: "/home/docker"
   docker-registry:
     namespace: {{ docker_registry_namespace }}
     domain: {{ docker_registry_domain }}
