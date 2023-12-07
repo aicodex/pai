@@ -15,6 +15,7 @@ export const HivedSkuSection = React.memo(props => {
   const { value, onChange } = props;
   const { skuNum, skuType } = value;
   const { hivedSkuTypes } = useContext(Context);
+  const { skuLimit } = useContext(Context);
 
   const skuOptions = useMemo(
     () =>
@@ -80,7 +81,7 @@ export const HivedSkuSection = React.memo(props => {
         <Stack horizontal verticalAlign='baseline'>
           <div style={{ width: '20%' }}>SKU count</div>
           <Stack.Item grow>
-            <CSpinButton value={skuNum} min={1} onChange={_onSkuNumChange} />
+            <CSpinButton value={skuNum} min={1} max={parseInt(skuLimit)} onChange={_onSkuNumChange} />
           </Stack.Item>
         </Stack>
         <Stack horizontal verticalAlign='baseline'>

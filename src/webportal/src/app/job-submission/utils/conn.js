@@ -50,6 +50,16 @@ export async function fetchJobConfig(userName, jobName) {
   return wrapper(() => client.job.getJobConfig(userName, jobName));
 }
 
+export async function getUserInstanceLimit(user) {
+  const userInfo = await wrapper(() => client.user.getUser(user));
+  return get(userInfo, 'instancelimit', 1);
+}
+
+export async function getUserSkuLimit(user) {
+  const userInfo = await wrapper(() => client.user.getUser(user));
+  return get(userInfo, 'skulimit', '8');
+}
+
 export async function listUserVirtualClusters(user) {
   const userInfo = await wrapper(() => client.user.getUser(user));
   return get(userInfo, 'virtualCluster', []);

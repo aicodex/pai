@@ -182,6 +182,31 @@ export default function Table() {
   };
 
   /**
+   * skulimit column
+   * @type {import('office-ui-fabric-react').IColumn}
+   */
+ const skulimitColumn = {
+  key: 'skulimit',
+  minWidth: 80,
+  maxWidth: 200,
+  name: 'Sku Limit',
+  className: FontClassNames.mediumPlus,
+  headerClassName: FontClassNames.medium,
+  isResizable: true,
+  onRender: userInfo => {
+    const { skulimit } = userInfo;
+    return (
+      <TableTextField
+        readOnly={isFinished(userInfo)}
+        defaultValue={skulimit}
+        onChange={(_event, newValue) => {
+          userInfo.skulimit = newValue;
+        }}
+      />
+    );
+  },
+};
+  /**
    * virtual cluster column
    * @type {import('office-ui-fabric-react').IColumn}
    */
@@ -305,6 +330,7 @@ export default function Table() {
     passwordColumn,
     emailColumn,
     adminColumn,
+    skulimitColumn,
     virtualClusterColumn,
     actionColumn,
   ];

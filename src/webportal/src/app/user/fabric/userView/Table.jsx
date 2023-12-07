@@ -124,6 +124,16 @@ export default function Table() {
     isResizable: true,
   });
 
+  const skulimitColumn = applySortProps({
+    key: 'skulimit',
+    minWidth: 80,
+    fieldName: 'skulimit',
+    name: 'Sku Limit',
+    className: FontClassNames.mediumPlus,
+    headerClassName: FontClassNames.medium,
+    isResizable: true,
+  });
+
   const virtualClusterColumn = applySortProps({
     key: 'virtualCluster',
     minWidth: 250,
@@ -191,6 +201,7 @@ export default function Table() {
     usernameColumn,
     adminColumn,
     emailColumn,
+    skulimitColumn,
     virtualClusterColumn,
     actionsColumn,
   ];

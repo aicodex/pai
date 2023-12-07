@@ -19,6 +19,7 @@ import React, { useRef, useContext, useState, useEffect } from 'react';
 import {
   Modal,
   TextField,
+  SpinButton,
   FontClassNames,
   PrimaryButton,
   DefaultButton,
@@ -37,6 +38,7 @@ import t from '../../../components/tachyons.scss';
 import {
   createUserRequest,
   updateUserPasswordRequest,
+  updateUserSkulimitRequest,
   updateUserAdminRequest,
   updateUserEmailRequest,
   updateUserVcRequest,
@@ -47,7 +49,7 @@ import CustomPassword from '../components/CustomPassword';
 import Context from './Context';
 
 export default function UserEditor({
-  user: { username = '', admin = false, email = '', virtualCluster = [] },
+  user: { username = '', admin = false, email = '', skulimit = '8', virtualCluster = [] },
   isOpen = false,
   isCreate = true,
   hide,
@@ -56,6 +58,7 @@ export default function UserEditor({
 
   const usernameRef = useRef(null);
   const passwordRef = useRef(null);
+  const skulimitRef = useRef(null);
   const emailRef = useRef(null);
   const adminRef = useRef(null);
 
@@ -92,6 +95,7 @@ export default function UserEditor({
 
     const newUsername = usernameRef.current.value;
     const newPassword = passwordRef.current.value;
+    const newSkulimit = skulimitRef.current.value;
     const newEmail = emailRef.current.value;
     const newAdmin = adminRef.current.checked;
 
@@ -125,6 +129,7 @@ export default function UserEditor({
     if (isCreate) {
       const result = await createUserRequest(
         newUsername,
+        newSkulimit,
         newEmail,
         newPassword,
         newAdmin,
@@ -145,6 +150,22 @@ export default function UserEditor({
     } else {
       if (newEmail !== email) {
         const result = await updateUserEmailRequest(newUsername, newEmail)
+          .then(() => {
+            setNeedRefreshAllUsers(true);
+            return { success: true };
+          })
+          .catch(err => {
+            return { success: false, message: String(err) };
+          });
+        if (!result.success) {
+          await showMessageBox(result.message);
+          setLock(false);
+          return;
+        }
+      }
+
+      if (newSkulimit !== skulimit) {
+        const result = await updateUserSkulimitRequest(newUsername, newSkulimit)
           .then(() => {
             setNeedRefreshAllUsers(true);
             return { success: true };
@@ -281,6 +302,19 @@ export default function UserEditor({
                   </td>
                 </tr>
                 <tr>
+                  <td className={tdLabelStyle} style={{ minWidth: '140px' }}>
+                    SKU Limit
+                  </td>
+                  <td className={tdPaddingStyle} style={{ minWidth: '248px' }}>
+                    <SpinButton
+                      id={`SkuLimit${Math.random()}`}
+                      componentRef={skulimitRef}
+                      min={"1"}
+                      defaultValue={skulimit}
+                    />
+                  </td>
+                </tr>
+                <tr>
                   <td className={tdLabelStyle}>Email</td>
                   <td className={tdPaddingStyle}>
                     <TextField
@@ -356,6 +390,7 @@ UserEditor.propTypes = {
   user: PropTypes.shape({
     username: PropTypes.string,
     admin: PropTypes.bool,
+    skulimit: PropTypes.string,
     email: PropTypes.string,
     virtualCluster: PropTypes.array,
   }),

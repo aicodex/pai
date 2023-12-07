@@ -76,6 +76,7 @@ export const updateUserVcRequest = async (username, virtualCluster) => {
 
 export const createUserRequest = async (
   username,
+  skulimit,
   email,
   password,
   admin,
@@ -88,7 +89,7 @@ export const createUserRequest = async (
     headers: {
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ username, email, password, admin, virtualCluster }),
+    body: JSON.stringify({ username, skulimit, email, password, admin, virtualCluster }),
   });
 };
 
@@ -110,6 +111,18 @@ export const updateUserPasswordRequest = async (
     clearToken();
   }
   return result;
+};
+
+export const updateUserSkulimitRequest = async (username, skulimit) => {
+  const url = `${config.restServerUri}/api/v2/user/${username}/skulimit`;
+  const token = checkToken();
+  return fetchWrapper(url, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ skulimit }),
+  });
 };
 
 export const updateUserEmailRequest = async (username, email) => {

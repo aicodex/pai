@@ -31,11 +31,11 @@ export const AUTO_GENERATE_NOTIFY =
 export const PAI_ENV_VAR = [
   {
     key: 'PAI_JOB_NAME',
-    desc: 'jobName in config file',
+    desc: 'config文件中的jobName',
   },
   {
     key: 'PAI_USER_NAME',
-    desc: 'User who submit the job',
+    desc: '提交这个job的用户名',
   },
   {
     key: 'PAI_DEFAULT_FS_URI',
@@ -115,14 +115,29 @@ All lines will be concatenated by "&&". So do not use characters like "#", "\\" 
 
 export const DOCKER_OPTIONS = [
   {
+    key: 'python_3.9.18_torch1.13.1_transformers_4.35.2',
+    text: 'PyTorch 1.13.1 + Python 3.9 + Transformers 4.35.2 with cuda11.6',
+    image: '210.75.240.150:30003/cipruntime/gpu:python_3.9.18_torch1.13.1_transformers_4.35.2',
+  },
+  {
+    key: 'python_3.9.18_torch2.1.1_transformers_4.35.2_cuda_12.1',
+    text: 'PyTorch 2.1.1 + Python 3.9 + Transformers 4.35.2 with cuda12.1',
+    image: '210.75.240.150:30003/cipruntime/gpu:python_3.9.18_torch2.1.1_transformers_4.35.2_cuda_12.1',
+  },
+  {
+    key: 'cuda-11.3-pytorch-1.12-tf-2.11-gpu-mpi-0.26.4',
+    text: 'PyTorch 1.12.0 + Tensorflow2.11.1 + Python 3.9 with cuda11.3',
+    image: '210.75.240.150:30003/determinedai/environments:cuda-11.3-pytorch-1.12-tf-2.11-gpu-mpi-0.26.4',
+  },
+  {
+    key: 'cuda-10.2-pytorch-1.7-tf-1.15-gpu-mpi-0.22.1',
+    text: 'PyTorch 1.7.1 + Tensorflow1.15.0 + Python 3.7 with cuda10.2',
+    image: '210.75.240.150:30003/determinedai/environments:cuda-10.2-pytorch-1.7-tf-1.15-gpu-mpi-0.22.1',
+  },
+  {
     key: 'python_3.6-pytorch_1.4.0-gpu',
     text: 'PyTorch 1.4.0 + Python 3.6 with GPU, CUDA 10.1',
     image: 'openpai/standard:python_3.6-pytorch_1.4.0-gpu',
-  },
-  {
-    key: 'python_3.6-pytorch_1.2.0-gpu',
-    text: 'PyTorch 1.2.0 + Python 3.6 with GPU, CUDA 10.0',
-    image: 'openpai/standard:python_3.6-pytorch_1.2.0-gpu',
   },
   {
     key: 'python_3.6-tensorflow_2.1.0-gpu',
@@ -133,36 +148,6 @@ export const DOCKER_OPTIONS = [
     key: 'python_3.6-tensorflow_1.15.0-gpu',
     text: 'TensorFlow 1.15.0 + Python 3.6 with GPU, CUDA 10.0',
     image: 'openpai/standard:python_3.6-tensorflow_1.15.0-gpu',
-  },
-  {
-    key: 'python_3.6-mxnet_1.5.1-gpu',
-    text: 'MXNet 1.5.1 + Python 3.6 with GPU, CUDA 10.1',
-    image: 'openpai/standard:python_3.6-mxnet_1.5.1-gpu',
-  },
-  {
-    key: 'python_3.6-cntk_2.7-gpu',
-    text: 'CNTK 2.7 + Python 3.6 with GPU, CUDA 10.1',
-    image: 'openpai/standard:python_3.6-cntk_2.7-gpu',
-  },
-  {
-    key: 'python_3.6-pytorch_1.4.0-cpu',
-    text: 'PyTorch 1.4.0 + Python 3.6 with CPU',
-    image: 'openpai/standard:python_3.6-pytorch_1.4.0-cpu',
-  },
-  {
-    key: 'python_3.6-pytorch_1.2.0-cpu',
-    text: 'PyTorch 1.2.0 + Python 3.6 with CPU',
-    image: 'openpai/standard:python_3.6-pytorch_1.2.0-cpu',
-  },
-  {
-    key: 'python_3.6-tensorflow_2.1.0-cpu',
-    text: 'TensorFlow 2.1.0 + Python 3.6 with CPU',
-    image: 'openpai/standard:python_3.6-tensorflow_2.1.0-cpu',
-  },
-  {
-    key: 'python_3.6-tensorflow_1.15.0-cpu',
-    text: 'TensorFlow 1.15.0 + Python 3.6 with CPU',
-    image: 'openpai/standard:python_3.6-tensorflow_1.15.0-cpu',
   },
 ];
 export const DEFAULT_DOCKER_URI =

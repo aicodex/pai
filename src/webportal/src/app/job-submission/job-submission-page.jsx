@@ -14,6 +14,7 @@ import Context from './components/context';
 import {
   fetchJobConfig,
   listHivedSkuTypes,
+  getUserSkuLimit,
   listUserVirtualClusters,
   listUserStorageConfigs,
   fetchStorageDetails,
@@ -107,6 +108,7 @@ export const JobSubmissionPage = ({
 
   // Context variables
   const [vcNames, setVcNames] = useState([]);
+  const [skuLimit, setSkuLimit] = useState('8');
   const [hivedSkuTypes, setHivedSkuTypes] = useState({});
   const [errorMessages, setErrorMessages] = useState({});
 
@@ -180,11 +182,12 @@ export const JobSubmissionPage = ({
   const contextValue = useMemo(
     () => ({
       vcNames,
+      skuLimit,
       hivedSkuTypes,
       errorMessages,
       setErrorMessage,
     }),
-    [vcNames, hivedSkuTypes, errorMessages, setErrorMessage],
+    [vcNames, skuLimit, hivedSkuTypes, errorMessages, setErrorMessage],
   );
 
   useEffect(() => {
@@ -365,12 +368,21 @@ export const JobSubmissionPage = ({
   }, [secrets]);
 
   useEffect(() => {
+    getUserSkuLimit(loginUser)
+      .then(skuLimit => {
+        setSkuLimit(skuLimit);
+      })
+      .catch(alert);
+  }, []);
+
+  useEffect(() => {
     listUserVirtualClusters(loginUser)
       .then(virtualClusters => {
         setVcNames(virtualClusters);
       })
       .catch(alert);
   }, []);
+
 
   useEffect(() => {
     listHivedSkuTypes(jobInformation.virtualCluster)
