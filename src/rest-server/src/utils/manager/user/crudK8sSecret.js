@@ -25,6 +25,7 @@ const USER_NAMESPACE = process.env.PAI_USER_NAMESPACE || 'pai-user-v2';
  * @typedef User
  * @property {string} UserInstance.username - username
  * @property {string} UserInstance.password - password. If no password is set, it will be ''
+ * @property {string} UserInstance.skulimit - skulimit. max sku count.
  * @property {string[]} UserInstance.grouplist - group list. Group name list which the user belongs to
  * @property {string} UserInstance.email - email
  * @property {Object} UserInstance.extension - extension field
@@ -56,6 +57,7 @@ async function read(key) {
         Buffer.from(userData.data.grouplist, 'base64').toString(),
       ),
       email: Buffer.from(userData.data.email, 'base64').toString(),
+      skulimit: Buffer.from(String(userData.data.skulimit), 'base64').toString(),
       extension: JSON.parse(
         Buffer.from(userData.data.extension, 'base64').toString(),
       ),
@@ -94,6 +96,7 @@ async function readAll() {
             Buffer.from(item.data.grouplist, 'base64').toString(),
           ),
           email: Buffer.from(item.data.email, 'base64').toString(),
+          skulimit: Buffer.from(String(item.data.skulimit), 'base64').toString(),
           extension: JSON.parse(
             Buffer.from(item.data.extension, 'base64').toString(),
           ),
@@ -131,6 +134,7 @@ async function create(key, value) {
       password: value.password,
       grouplist: value.grouplist,
       email: value.email,
+      skulimit: value.skulimit,
       extension: value.extension,
     });
     await User.encryptUserPassword(userInstance);
@@ -143,6 +147,7 @@ async function create(key, value) {
           'base64',
         ),
         email: Buffer.from(userInstance.email).toString('base64'),
+        skulimit: Buffer.from(String(userInstance.skulimit)).toString('base64'),
         extension: Buffer.from(JSON.stringify(userInstance.extension)).toString(
           'base64',
         ),
@@ -176,6 +181,7 @@ async function update(key, value, updatePassword = false) {
       password: value.password,
       grouplist: value.grouplist,
       email: value.email,
+      skulimit: value.skulimit,
       extension: value.extension,
     });
     if (updatePassword) {
@@ -190,6 +196,7 @@ async function update(key, value, updatePassword = false) {
           'base64',
         ),
         email: Buffer.from(userInstance.email).toString('base64'),
+        skulimit: Buffer.from(String(userInstance.skulimit)).toString('base64'),
         extension: Buffer.from(JSON.stringify(userInstance.extension)).toString(
           'base64',
         ),

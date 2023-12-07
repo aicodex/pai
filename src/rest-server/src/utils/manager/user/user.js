@@ -25,6 +25,7 @@ const userSchema = Joi.object()
       .required(),
     email: Joi.string().email().empty('').default(''),
     grouplist: Joi.array().items(Joi.string()).required(),
+    skulimit: Joi.string().empty('').default(''),
     password: Joi.string().empty('').default(''),
     extension: Joi.object().pattern(/\w+/, Joi.required()).required(),
   })

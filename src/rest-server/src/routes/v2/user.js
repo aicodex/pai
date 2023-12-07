@@ -148,6 +148,16 @@ if (authnConfig.authnMethod === 'basic') {
 
   /** Legacy API and will be deprecated in the future. Please use put /api/v2/users */
   router
+    .route('/:username/skulimit')
+    /** Update /api/v2/users/:username/skulimit */
+    .put(
+      token.checkNotApplication,
+      param.validate(userInputSchema.userSkulimitUpdateInputSchema),
+      userController.updateUserSkulimit,
+    );
+
+  /** Legacy API and will be deprecated in the future. Please use put /api/v2/users */
+  router
     .route('/:username/admin')
     /** Update /api/v2/users/:username/admin */
     .put(

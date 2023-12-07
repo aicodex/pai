@@ -46,6 +46,11 @@ const userEmailUpdateInputSchema = Joi.object().keys({
   email: Joi.string().email().empty(''),
 });
 
+// define the input schema for the 'update user skulimit' api
+const userSkulimitUpdateInputSchema = Joi.object().keys({
+  skulimit: Joi.string().empty(''),
+});
+
 // define the input schema for the 'update user admin permission' api
 const userAdminPermissionUpdateInputSchema = Joi.object().keys({
   admin: Joi.boolean().required(),
@@ -64,6 +69,7 @@ const userCreateInputSchema = Joi.object().keys({
     .regex(/^[\w.-]+$/, 'username')
     .required(),
   email: Joi.string().email().empty(''),
+  skulimit: Joi.string().empty(''),
   virtualCluster: Joi.array().items(Joi.string()).default([]),
   admin: Joi.boolean().default(false),
   password: Joi.string().min(6).required(),
@@ -79,6 +85,7 @@ const basicAdminUserUpdateInputSchema = Joi.object().keys({
         .regex(/^[\w.-]+$/, 'username')
         .required(),
       email: Joi.string().email(),
+      skulimit: Joi.string().empty("").default("2"),
       virtualCluster: Joi.array().items(Joi.string()),
       admin: Joi.boolean(),
       password: Joi.string().min(6),
@@ -88,6 +95,7 @@ const basicAdminUserUpdateInputSchema = Joi.object().keys({
       is: true,
       then: Joi.object({
         email: Joi.empty(null),
+        skulimit: Joi.empty(null),
         virtualCluster: Joi.empty(null),
         admin: Joi.empty(null),
         password: Joi.empty(null),
@@ -95,6 +103,7 @@ const basicAdminUserUpdateInputSchema = Joi.object().keys({
       }),
       otherwise: Joi.object({
         email: Joi.required(),
+        skulimit: Joi.required(),
         virtualCluster: Joi.required(),
         admin: Joi.required(),
         password: Joi.required(),
@@ -155,6 +164,7 @@ module.exports = {
   userGrouplistUpdateInputSchema,
   userPasswordUpdateInputSchema,
   userEmailUpdateInputSchema,
+  userSkulimitUpdateInputSchema,
   userAdminPermissionUpdateInputSchema,
   addOrRemoveGroupInputSchema,
 };

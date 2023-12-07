@@ -128,6 +128,7 @@ const createUserIfUserNotExist = async (req, res, next) => {
     const userValue = {
       username: userData.username,
       email: userData.email,
+      skulimit: userData.skulimit,
       password: userData.oid,
       grouplist: grouplist,
       extension: {},
@@ -198,6 +199,7 @@ const createUser = async (req, res, next) => {
   const userValue = {
     username: req.body.username,
     email: req.body.email,
+    skulimit: req.body.skulimit,
     password: req.body.password,
     grouplist: grouplist,
     extension: req.body.extension,
@@ -493,6 +495,40 @@ const updateUserPassword = async (req, res, next) => {
   }
 };
 
+const updateUserSkulimit = async (req, res, next) => {
+  try {
+    const username = req.params.username;
+    const skulimit = req.body.skulimit;
+    if (req.user.admin) {
+      const userInfo = await userModel.getUser(username);
+      userInfo.skulimit = skulimit;
+      await userModel.updateUser(username, userInfo);
+      return res.status(201).json({
+        message: 'Update user skulimit data successfully.',
+      });
+    } else {
+      next(
+        createError(
+          'Forbidden',
+          'ForbiddenUserError',
+          `Pls input the correct password.`,
+        ),
+      );
+    }
+  } catch (error) {
+    if (error.status === 404) {
+      return next(
+        createError(
+          'Not Found',
+          'NoUserError',
+          `User ${req.params.username} not found.`,
+        ),
+      );
+    }
+    return next(createError.unknown(error));
+  }
+};
+
 const updateUserEmail = async (req, res, next) => {
   try {
     const username = req.params.username;
@@ -609,6 +645,9 @@ const basicAdminUserUpdate = async (req, res, next) => {
     let updatePassword = false;
     if ('email' in req.body.data) {
       userInfo.email = req.body.data.email;
+    }
+    if ('skulimit' in req.body.skulimit) {
+      userInfo.skulimit = req.body.data.skulimit;
     }
     if ('virtualCluster' in req.body.data) {
       try {
@@ -794,6 +833,7 @@ module.exports = {
   updateUserExtension,
   updateUserVirtualCluster,
   updateUserEmail,
+  updateUserSkulimit,
   updateUserAdminPermission,
   addGroupIntoUserGrouplist,
   removeGroupFromUserGrouplist,

@@ -345,6 +345,7 @@ const createDefaultAdminUser = async () => {
     const userValue = {
       username: secretConfig.adminName,
       email: '',
+      skulimit: '9999',
       password: secretConfig.adminPass,
       grouplist: groupnameList,
       extension: {},
