@@ -186,6 +186,59 @@ const update = asyncHandler(async (req, res) => {
   const jobName = res.locals.protocol.name;
   const userName = req.user.username;
   const frameworkName = `${userName}~${jobName}`;
+  const needGpuCount = Object.values(res.locals.protocol.taskRoles).map((taskRole) => taskRole.instances * taskRole.resourcePerInstance.gpu).reduce((sum,value) => {return sum + value;},0)
+  const userSkuLimit = parseInt(req.user.skulimit);
+  //like {{PaiHost}}/rest-server/api/v2/jobs?username=aaa&state=WAITING,RUNNING
+  var usedGpuCount = 0;
+  const userRunningJobFilters = {};
+  userRunningJobFilters.userName = [userName];
+  userRunningJobFilters.state = ["WAITING","RUNNING"];
+  try {
+  const listAttributes = [
+    'name',
+    'jobName',
+    'userName',
+    'executionType',
+    'submissionTime',
+    'creationTime',
+    'launchTime',
+    'virtualCluster',
+    'totalGpuNumber',
+    'totalTaskNumber',
+    'totalTaskRoleNumber',
+    'jobPriority',
+    'retries',
+    'retryDelayTime',
+    'platformRetries',
+    'resourceRetries',
+    'userRetries',
+    'completionTime',
+    'appExitCode',
+    'subState',
+    'state',
+  ];
+  const data = await job.list(
+    listAttributes,
+    filters,
+    {}, //tagsContainFilter
+    {}, //tagsNotContainFilter
+    [['submissionTime', 'DESC']], //order
+    0, //offset
+    5000, //limit
+    false, //withTotalCount
+  );
+    if (data != null) {
+      usedGpuCount = data.map((perJob)=>perJob.totalGpuNumber).reduce((sum,value) => {return sum + value;},0)
+    }
+  } catch (error) {
+  }
+  if ((needGpuCount + usedGpuCount) > userSkuLimit){
+    throw createError(
+      'Bad Request',
+      'NoVirtualClusterError',
+      `你最多可以用个 ${userSkuLimit} 个GPU，已经用了 ${usedGpuCount} 个GPU，申请 ${needGpuCount} 个GPU失败`,
+    );
+  }
 
   // check duplicate job
   try {
