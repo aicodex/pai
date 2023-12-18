@@ -85,7 +85,7 @@ const basicAdminUserUpdateInputSchema = Joi.object().keys({
         .regex(/^[\w.-]+$/, 'username')
         .required(),
       email: Joi.string().email(),
-      skulimit: Joi.string().empty("").default("2"),
+      skulimit: Joi.string(),
       virtualCluster: Joi.array().items(Joi.string()),
       admin: Joi.boolean(),
       password: Joi.string().min(6),
