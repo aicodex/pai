@@ -20,6 +20,7 @@ const status = require('statuses');
 
 const asyncHandler = require('@pai/middlewares/v2/asyncHandler');
 const createError = require('@pai/utils/error');
+const userModel = require('@pai/models/v2/user');
 const { job, log } = require('@pai/models/v2/job');
 const logger = require('@pai/config/logger');
 const { Op } = require('sequelize');
@@ -187,51 +188,60 @@ const update = asyncHandler(async (req, res) => {
   const userName = req.user.username;
   const frameworkName = `${userName}~${jobName}`;
   const needGpuCount = Object.values(res.locals.protocol.taskRoles).map((taskRole) => taskRole.instances * taskRole.resourcePerInstance.gpu).reduce((sum,value) => {return sum + value;},0)
-  const userSkuLimit = parseInt(req.user.skulimit);
+  var userSkuLimit = 8;
   //like {{PaiHost}}/rest-server/api/v2/jobs?username=aaa&state=WAITING,RUNNING
   var usedGpuCount = 0;
   const userRunningJobFilters = {};
   userRunningJobFilters.userName = [userName];
   userRunningJobFilters.state = ["WAITING","RUNNING"];
   try {
-  const listAttributes = [
-    'name',
-    'jobName',
-    'userName',
-    'executionType',
-    'submissionTime',
-    'creationTime',
-    'launchTime',
-    'virtualCluster',
-    'totalGpuNumber',
-    'totalTaskNumber',
-    'totalTaskRoleNumber',
-    'jobPriority',
-    'retries',
-    'retryDelayTime',
-    'platformRetries',
-    'resourceRetries',
-    'userRetries',
-    'completionTime',
-    'appExitCode',
-    'subState',
-    'state',
-  ];
-  const data = await job.list(
-    listAttributes,
-    filters,
-    {}, //tagsContainFilter
-    {}, //tagsNotContainFilter
-    [['submissionTime', 'DESC']], //order
-    0, //offset
-    5000, //limit
-    false, //withTotalCount
-  );
-    if (data != null) {
-      usedGpuCount = data.map((perJob)=>perJob.totalGpuNumber).reduce((sum,value) => {return sum + value;},0)
+    const listAttributes = [
+      'name',
+      'jobName',
+      'userName',
+      'executionType',
+      'submissionTime',
+      'creationTime',
+      'launchTime',
+      'virtualCluster',
+      'totalGpuNumber',
+      'totalTaskNumber',
+      'totalTaskRoleNumber',
+      'jobPriority',
+      'retries',
+      'retryDelayTime',
+      'platformRetries',
+      'resourceRetries',
+      'userRetries',
+      'completionTime',
+      'appExitCode',
+      'subState',
+      'state',
+    ];
+    const jobData = await job.list(
+      listAttributes,
+      userRunningJobFilters,
+      {}, //tagsContainFilter
+      {}, //tagsNotContainFilter
+      [['submissionTime', 'DESC']], //order
+      0, //offset
+      5000, //limit
+      false, //withTotalCount
+    );
+    if (jobData != null) {
+      usedGpuCount = jobData.map((perJob)=>perJob.totalGpuNumber).reduce((sum,value) => {return sum + value;},0)
     }
   } catch (error) {
   }
+  try{
+    const userInfo = await userModel.getUser(userName);
+    if (userInfo != null) {
+      userSkuLimit = parseInt(userInfo.skulimit);
+    }
+  }
+  catch (error) {
+  }
+  logger.info(`${userName} 最多可以用个 ${userSkuLimit} 个GPU，已经用了 ${usedGpuCount} 个GPU，申请 ${needGpuCount} 个GPU`);
   if ((needGpuCount + usedGpuCount) > userSkuLimit){
     throw createError(
       'Bad Request',
