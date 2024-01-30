@@ -187,7 +187,18 @@ const update = asyncHandler(async (req, res) => {
   const jobName = res.locals.protocol.name;
   const userName = req.user.username;
   const frameworkName = `${userName}~${jobName}`;
-  const needGpuCount = Object.values(res.locals.protocol.taskRoles).map((taskRole) => taskRole.instances * taskRole.resourcePerInstance.gpu).reduce((sum,value) => {return sum + value;},0)
+  const clusterWeight = {"default":0.25,"vc1":1,"vc2":1};
+  const skuWeight = {"gpu-machine-a100-1t":1,"gpu-machine-a100-2t":1,"gpu-machine-3090":0.25};
+  const needGpuCount = Object.keys(res.locals.protocol.taskRoles).map((taskRoleKey) =>{
+    const taskRole = res.locals.protocol.taskRoles[taskRoleKey];
+    try {
+      const skuData = res.locals.protocol.extras.hivedScheduler.taskRoles[taskRoleKey];
+      return taskRole.instances * skuWeight[skuData.skuType] * skuData.skuNum;
+    }
+    catch(err) {
+      return taskRole.instances * taskRole.resourcePerInstance.gpu //没找到sku就当A100算
+    }
+  }).reduce((sum,value) => {return sum + value;},0)
   var userSkuLimit = 8;
   //like {{PaiHost}}/rest-server/api/v2/jobs?username=aaa&state=WAITING,RUNNING
   var usedGpuCount = 0;
@@ -229,14 +240,19 @@ const update = asyncHandler(async (req, res) => {
       false, //withTotalCount
     );
     if (jobData != null) {
-      usedGpuCount = jobData.map((perJob)=>perJob.totalGpuNumber).reduce((sum,value) => {return sum + value;},0)
+      usedGpuCount = jobData.map((perJob)=>{
+        if(clusterWeight[perJob.virtualCluster]) 
+          return perJob.totalGpuNumber * clusterWeight[perJob.virtualCluster]
+        else
+          return perJob.totalGpuNumber //没有就按1算
+      }).reduce((sum,value) => {return sum + value;},0)
     }
   } catch (error) {
   }
   try{
     const userInfo = await userModel.getUser(userName);
     if (userInfo != null) {
-      userSkuLimit = parseInt(userInfo.skulimit);
+      userSkuLimit = parseFloat(userInfo.skulimit);
     }
   }
   catch (error) {
@@ -246,7 +262,7 @@ const update = asyncHandler(async (req, res) => {
     throw createError(
       'Bad Request',
       'NoVirtualClusterError',
-      `你最多可以用个 ${userSkuLimit} 个GPU，已经用了 ${usedGpuCount} 个GPU，申请 ${needGpuCount} 个GPU失败`,
+      `你最多可以用个 ${userSkuLimit} 个GPU额度（3090占0.25额度,A100占1额度,A6000占0.5额度），已经用了 ${usedGpuCount} 个GPU额度，申请 ${needGpuCount} 个GPU额度失败`,
     );
   }
 

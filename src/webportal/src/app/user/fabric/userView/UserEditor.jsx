@@ -49,7 +49,7 @@ import CustomPassword from '../components/CustomPassword';
 import Context from './Context';
 
 export default function UserEditor({
-  user: { username = '', admin = false, email = '', skulimit = '8', virtualCluster = [] },
+  user: { username = '', admin = false, email = '', skulimit = '2', virtualCluster = [] },
   isOpen = false,
   isCreate = true,
   hide,
@@ -309,7 +309,8 @@ export default function UserEditor({
                     <SpinButton
                       id={`SkuLimit${Math.random()}`}
                       componentRef={skulimitRef}
-                      min={"1"}
+                      step={"0.25"}
+                      min={"0.25"}
                       defaultValue={skulimit}
                     />
                   </td>

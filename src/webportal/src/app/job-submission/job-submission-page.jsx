@@ -108,7 +108,7 @@ export const JobSubmissionPage = ({
 
   // Context variables
   const [vcNames, setVcNames] = useState([]);
-  const [skuLimit, setSkuLimit] = useState('8');
+  const [skuLimit, setSkuLimit] = useState('2.0');
   const [hivedSkuTypes, setHivedSkuTypes] = useState({});
   const [errorMessages, setErrorMessages] = useState({});
 

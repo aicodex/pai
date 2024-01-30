@@ -16,6 +16,7 @@ export const HivedSkuSection = React.memo(props => {
   const { skuNum, skuType } = value;
   const { hivedSkuTypes } = useContext(Context);
   const { skuLimit } = useContext(Context);
+  const skuWeight = {"gpu-machine-a100-1t":1,"gpu-machine-a100-2t":1,"gpu-machine-3090":0.25};
 
   const skuOptions = useMemo(
     () =>
@@ -37,15 +38,16 @@ export const HivedSkuSection = React.memo(props => {
     if (value.skuType != null) {
       const selected = skuOptions.find(option => option.key === value.skuType);
       if (selected == null) {
-        onChange({ ...value, skuType: null, sku: null });
+        onChange({ ...value, skuType: null, sku: null, skuNum: 1, });
       } else if (value.sku == null) {
-        onChange({ ...value, sku: get(selected, 'sku', null) });
+        onChange({ ...value, sku: get(selected, 'sku', null), skuNum: 1, });
       }
     } else if (!isEmpty(skuOptions)) {
       onChange({
         ...value,
         skuType: skuOptions[0].key,
         sku: skuOptions[0].sku,
+        skuNum: 1,
       });
     }
   };
@@ -81,7 +83,7 @@ export const HivedSkuSection = React.memo(props => {
         <Stack horizontal verticalAlign='baseline'>
           <div style={{ width: '20%' }}>SKU count</div>
           <Stack.Item grow>
-            <CSpinButton value={skuNum} min={1} max={parseInt(skuLimit)} onChange={_onSkuNumChange} />
+            <CSpinButton value={skuNum} min={1} max={skuWeight && skuType && skuWeight[skuType] ? parseInt(parseFloat(skuLimit) / skuWeight[skuType]) : parseInt(skuLimit)} onChange={_onSkuNumChange} />
           </Stack.Item>
         </Stack>
         <Stack horizontal verticalAlign='baseline'>

@@ -19,7 +19,7 @@ import React from 'react';
 
 export default React.createContext({
   vcNames: [],
-  skuLimit: '8',
+  skuLimit: 2.0,
   hivedSkuTypes: {},
   errorMessages: {},
   setErrorMessage: (id, msg) => {},
